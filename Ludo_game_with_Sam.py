@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image,ImageTk
 import time
-from random import randint
+from random import randint, choice
 
 class Ludo:
     def __init__(self, root,six_side_block,five_side_block,four_side_block,three_side_block,two_side_block,one_side_block):
@@ -71,6 +71,7 @@ class Ludo:
 
         # Robo Control
         self.robo_prem = 0
+        self.robo_store = []
 
         # By default some function call
         self.board_set_up()
@@ -414,7 +415,6 @@ class Ludo:
                 block_value_predict = self.block_value_predict[3]
                 permanent_block_number = self.move_green_counter = randint(1, 6)
 
-
             block_value_predict[1]['state'] = DISABLED
 
             # Illusion of coin floating
@@ -502,7 +502,7 @@ class Ludo:
             else:
                 block_value_predict[3]['state'] = NORMAL# Give btn activation
                 print("Normal 1")
-                if self.robo_prem == 1 and block_value_predict == self.block_value_predict[1]:
+                if self.robo_prem == 1 and block_value_predict == self.block_value_predict[0]:
                     robo_operator = "give"
                     print("Present 1")
                 block_value_predict[1]['state'] = DISABLED# Predict btn deactivation
@@ -510,9 +510,6 @@ class Ludo:
         else:
             block_value_predict[1]['state'] = NORMAL# Predict btn activation
             print("Normal 2")
-            """if self.robo_prem == 1 and block_value_predict == self.block_value_predict[1]:
-                    print("Present 1")
-                    robo_operator = "predict"""""
             if self.six_with_overlap == 1:
                 self.time_for -= 1
                 self.six_with_overlap = 0
@@ -721,8 +718,6 @@ class Ludo:
 
             self.block_value_predict[0][1]['state'] = NORMAL
             print("Normal 6")
-            """if self.robo_prem == 1:
-                robo_operator = "predict"""
 
 
         elif color_coin == "green":
@@ -971,6 +966,8 @@ class Ludo:
                     self.red_number_label[take_coin_number].place_forget()
                     self.red_coin_position[take_coin_number] = -1
                     self.red_coord_store[take_coin_number] = -1
+                    if self.robo_prem == 1:
+                        self.robo_store.remove(take_coin_number+1)
 
                     if take_coin_number == 0:
                        remade_coin = self.make_canvas.create_oval(100+40, 15+40, 100+40+40, 15+40+40, width=3, fill="red", outline="black")
@@ -1183,9 +1180,59 @@ class Ludo:
         return True
 
     def robo_judge(self, ind="give"):
-        
         if ind == "give":
             print("Give")
+            all_in = 1
+            for i in range(4):
+                if self.red_coin_position[i] == -1:
+                    all_in = 1
+                else:
+                    all_in = 0
+                    break
+            if all_in == 1:
+                if self.move_red_counter == 6:
+                    predicted_coin = choice([1,2,3,4])
+                    self.robo_store.append(predicted_coin)
+                    self.main_controller("red", predicted_coin)
+                else:
+                    pass
+            else:
+                temp = self.red_coin_position
+                if len(self.robo_store) == 1:
+                    if self.move_red_counter<6:
+                        self.main_controller("red", self.robo_store[0])
+                    else:
+                        take_ref = self.sky_blue_coin_position
+                        forward_perm = 0
+                        for coin in take_ref:
+                            if coin>-1:
+                                if coin-temp[self.robo_store[0]-1] >= 6:
+                                    forward_perm = 1
+                                    break
+                                else:
+                                    forward_perm = 0
+                            elif coin == -1:
+                                if temp[self.robo_store[0]-1] == 1:
+                                    forward_perm = 1
+                                else:
+                                    forward_perm = 0
+                            else:
+                                forward_perm = 0
+
+                        if forward_perm == 0:
+                            print("\nGive Present here 1")
+                            store = [1,2,3,4]
+                            store.remove(self.robo_store[0])
+                            predicted_coin = choice(store)
+                            self.robo_store.append(predicted_coin)
+                            self.main_controller("red", predicted_coin)
+                        else:
+                            print("\nGive Present here 2")
+                            self.main_controller("red", self.robo_store[0])
+                else:
+                    pass
+                    # For (6) code
+
         else:
             self.make_prediction("red")
 
