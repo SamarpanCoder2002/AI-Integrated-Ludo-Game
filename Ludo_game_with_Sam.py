@@ -1206,7 +1206,7 @@ class Ludo:
                         forward_perm = 0
                         for coin in take_ref:
                             if coin>-1:
-                                if coin-temp[self.robo_store[0]-1] >= 6:
+                                if coin-temp[self.robo_store[0]-1] >= 6 and coin-temp[self.robo_store[0]-1] <= 12:
                                     forward_perm = 1
                                     break
                                 else:
