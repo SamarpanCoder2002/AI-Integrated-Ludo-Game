@@ -695,9 +695,10 @@ class Ludo:
 
                 if self.red_coin_position[int(coin_number)-1]+self.move_red_counter<=106:
                    self.red_coin_position[int(coin_number)-1] = self.motion_of_coin(self.red_coin_position[int(coin_number) - 1],self.made_red_coin[int(coin_number)-1],self.red_number_label[int(coin_number)-1],red_start_label_x,red_start_label_y,"red",self.move_red_counter)
-                   """if self.red_coin_position[int(coin_number)-1] == 106 and self.robo_prem == 1 and color_coin == "red":
+                   if self.red_coin_position[int(coin_number)-1] == 106 and self.robo_prem == 1 and color_coin == "red":
                         print("\nPresent Here")
-                        self.robo_store.remove(int(coin_number))"""
+                        self.robo_store.remove(int(coin_number))
+                        print("After removing: ", self.robo_store)
                 else:
                    print(self.robo_store) 
                    messagebox.showerror("Not possible","Sorry, not permitted")
@@ -883,12 +884,16 @@ class Ludo:
                 counter_coin = self.under_room_traversal_control(specific_coin, number_label, number_label_x, number_label_y, path_counter, counter_coin, color_coin)
 
                 if  counter_coin == 106:
-                    if self.robo_prem == 1 and color_coin == "red":
+                    """if self.robo_prem == 1 and color_coin == "red":
                         for coin in self.robo_store:
+                            print("Truly present at 1")
                             if self.red_coin_position[coin - 1] == 106:
+                                print("Truly present at 2")
                                 self.robo_store.remove(coin)
                                 break
-                    print(self.robo_store)
+                            else:
+                                print(self.red_coin_position[coin - 1])"""
+                    print("After removing: ", self.robo_store)
                     messagebox.showinfo("Destination reached","Congrats! You now at the destination")
                     if path_counter == 6:
                         self.six_with_overlap = 1
@@ -1328,7 +1333,7 @@ class Ludo:
                                         if take_max and abs(take_max[0]) <= self.move_red_counter:
                                             print("From negative side towards Positive side forward")
                                             work_comp_in_neg = 1
-                                            self.main_controller("red", take_min[1][0])
+                                            self.main_controller("red", take_max[1][0])
                                             break
                                         else:
                                             index_from_last -= 1
