@@ -71,6 +71,7 @@ class Ludo:
 
         # Robo Control
         self.robo_prem = 0
+        self.count_robo_stage_from_start = 0
         self.robo_store = []
 
         # By default some function call
@@ -398,10 +399,16 @@ class Ludo:
 
     # Get block value after prediction based on probability
     def make_prediction(self,color_indicator):
-        try:
+        
             if color_indicator == "red":
                 block_value_predict = self.block_value_predict[0]
-                permanent_block_number = self.move_red_counter = randint(1, 6)
+                if self.count_robo_stage_from_start < 3:
+                    self.count_robo_stage_from_start += 1
+                if self.count_robo_stage_from_start == 3 and self.six_counter < 2:
+                    permanent_block_number = self.move_red_counter = 6
+                    self.count_robo_stage_from_start += 1
+                else:    
+                    permanent_block_number = self.move_red_counter = randint(1, 6)
 
             elif color_indicator == "sky_blue":
                 block_value_predict = self.block_value_predict[1]
@@ -431,9 +438,7 @@ class Ludo:
             # Permanent predicted value containing image set
             block_value_predict[0]['image'] = self.block_number_side[permanent_block_number-1]
             self.instructional_btn_customization_based_on_current_situation(color_indicator,permanent_block_number,block_value_predict)
-        except:
-            print("Force stop error")
-
+        
     def instructional_btn_customization_based_on_current_situation(self,color_indicator,permanent_block_number,block_value_predict):
         robo_operator = None
         if color_indicator == "red":
@@ -690,7 +695,11 @@ class Ludo:
 
                 if self.red_coin_position[int(coin_number)-1]+self.move_red_counter<=106:
                    self.red_coin_position[int(coin_number)-1] = self.motion_of_coin(self.red_coin_position[int(coin_number) - 1],self.made_red_coin[int(coin_number)-1],self.red_number_label[int(coin_number)-1],red_start_label_x,red_start_label_y,"red",self.move_red_counter)
+                   """if self.red_coin_position[int(coin_number)-1] == 106 and self.robo_prem == 1 and color_coin == "red":
+                        print("\nPresent Here")
+                        self.robo_store.remove(int(coin_number))"""
                 else:
+                   print(self.robo_store) 
                    messagebox.showerror("Not possible","Sorry, not permitted")
                    self.block_value_predict[0][3]['state'] = NORMAL
                    print("Normal 4")
@@ -874,6 +883,12 @@ class Ludo:
                 counter_coin = self.under_room_traversal_control(specific_coin, number_label, number_label_x, number_label_y, path_counter, counter_coin, color_coin)
 
                 if  counter_coin == 106:
+                    if self.robo_prem == 1 and color_coin == "red":
+                        for coin in self.robo_store:
+                            if self.red_coin_position[coin - 1] == 106:
+                                self.robo_store.remove(coin)
+                                break
+                    print(self.robo_store)
                     messagebox.showinfo("Destination reached","Congrats! You now at the destination")
                     if path_counter == 6:
                         self.six_with_overlap = 1
@@ -1198,14 +1213,14 @@ class Ludo:
                     pass
             else:
                 temp = self.red_coin_position
+                take_ref = self.sky_blue_coin_position
                 if len(self.robo_store) == 1:
                     if self.move_red_counter<6:
                         self.main_controller("red", self.robo_store[0])
                     else:
-                        take_ref = self.sky_blue_coin_position
                         forward_perm = 0
                         for coin in take_ref:
-                            if coin>-1:
+                            if coin>-1 and coin<100:
                                 if coin-temp[self.robo_store[0]-1] >= 6 and coin-temp[self.robo_store[0]-1] <= 12:
                                     forward_perm = 1
                                     break
@@ -1230,9 +1245,122 @@ class Ludo:
                             print("\nGive Present here 2")
                             self.main_controller("red", self.robo_store[0])
                 else:
-                    pass
-                    # For (6) code
-
+                    if self.move_red_counter<6:
+                        normal_movement = 1
+                        for coin in self.robo_store:
+                            if temp[coin-1]+self.move_red_counter <= 106:
+                                pass
+                            else:
+                                normal_movement = 0
+                                break
+                        if normal_movement:
+                            temp_robo_store = self.robo_store
+                        else:
+                            temp_robo_store = [coin for coin in self.robo_store if temp[coin-1]+self.move_red_counter <= 106]
+                        # Overlapp checking
+                        process_forward = 1
+                        for coin in temp_robo_store:
+                            if temp[coin-1]+self.move_red_counter in take_ref:
+                                print("Not Proceed as location satisfied")
+                                process_forward = 0
+                                self.main_controller("red", coin)
+                                break
+                        # Not a single overlapp found so now self rescue or safe forward
+                        print("\nPresent 1 now")
+                        if process_forward:
+                            print("\nPresent 2 now")
+                            print("Proceed as location not satisfied")
+                            store = {}
+                            if take_ref:
+                                print("\nPresent 3 now")
+                                for robo in temp_robo_store:#  robo is coin number
+                                    for coin_other in take_ref:# coin_other is sky_blue coin location
+                                        if coin_other>-1 and coin_other<100:
+                                            store[temp[robo-1]-coin_other] = (robo, take_ref.index(coin_other)+1)
+                            # positive_dis = robo front          negative_dis = robo_behind
+                            print("\nPresent 4 now, store: ",store)
+                            if store:
+                                print("\nPresent 5 now, store: ",store)
+                                store_positive_dis = {}
+                                store_negative_dis = {}
+                                take_max = 0
+                                take_min = 0
+                                try:
+                                    store_positive_dis = dict((k,v) for k,v in store.items() if k>0)
+                                    take_min = min(store_positive_dis.items())
+                                except:
+                                    pass
+                                try:
+                                    store_negative_dis = dict((k,v) for k,v in store.items() if k<0)
+                                    take_max = max(store_negative_dis.items())
+                                except:
+                                    pass
+                                # take_max,take_min = max(store_negative_dis.items()), min(store_positive_dis.items())
+                                work_comp_in_pos = 0
+                                take_len = len(store_positive_dis)
+                                index_from_last = -1
+                                # Positive forward checking
+                                print("Positive forward checking intro")
+                                while take_len:
+                                    print("Positive forward checking under")
+                                    if take_min and take_min[0] <= 6:
+                                        print("Positive forward")
+                                        work_comp_in_pos = 1
+                                        self.main_controller("red", take_min[1][0])
+                                        break
+                                    else:
+                                        index_from_last -= 1
+                                        try:
+                                            take_min = min(sorted(store_positive_dis.items())[index_from_last])
+                                        except:
+                                            break
+                                    take_len -= 1
+                                # Negative forward checking
+                                work_comp_in_neg = 0
+                                if not work_comp_in_pos:
+                                    take_len = len(store_negative_dis)
+                                    index_from_last = len(store_negative_dis)-1
+                                    print("Negative forward checking intro")
+                                    while take_len:
+                                        print("store_negative_dis:  ",store_negative_dis)
+                                        print("take_max:  ",take_max)
+                                        print("Negative forward checking under")
+                                        if take_max and abs(take_max[0]) <= self.move_red_counter:
+                                            print("From negative side towards Positive side forward")
+                                            work_comp_in_neg = 1
+                                            self.main_controller("red", take_min[1][0])
+                                            break
+                                        else:
+                                            index_from_last -= 1
+                                            try:
+                                                take_max = max(sorted(store_negative_dis.items())[index_from_last])
+                                            except:
+                                                break
+                                        take_len -= 1
+                                    print("\nProblem here 1")
+                                if not work_comp_in_neg and not work_comp_in_pos:
+                                    print("\nProblem here 2")
+                                    print("positive and negative doed not working....so here")
+                                    close_to_dest = temp_robo_store[0]
+                                    print("\nProblem here 3")
+                                    for coin_index in range(1,len(temp_robo_store)):
+                                        if temp[temp_robo_store[coin_index]-1] > temp[close_to_dest-1]:
+                                            close_to_dest = temp_robo_store[coin_index]
+                                    print("\nProblem here 4")
+                                    self.main_controller("red", close_to_dest)
+                            else:
+                                print("\nProblem here 5")
+                                print("\nPresent 5 now")
+                                close_to_dest = temp_robo_store[0]
+                                for coin_index in range(1,len(temp_robo_store)):
+                                    if temp[temp_robo_store[coin_index]-1] > temp[close_to_dest-1]:
+                                        close_to_dest = temp_robo_store[coin_index]
+                                self.main_controller("red", close_to_dest)
+                                print("\nProblem here 6")
+                        else:
+                            pass
+                            print("pre proceed with location satisfied")
+                        
         else:
             self.make_prediction("red")
 
