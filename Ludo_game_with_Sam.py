@@ -401,6 +401,7 @@ class Ludo:
     def make_prediction(self,color_indicator):
         
             if color_indicator == "red":
+                print("Count from start: ",self.count_robo_stage_from_start)
                 block_value_predict = self.block_value_predict[0]
                 if self.count_robo_stage_from_start < 3:
                     self.count_robo_stage_from_start += 1
@@ -896,7 +897,10 @@ class Ludo:
 
                 if  counter_coin == 106:
                     print("After removing: ", self.robo_store)
-                    messagebox.showinfo("Destination reached","Congrats! You now at the destination")
+                    if self.robo_prem == 1 and color_coin == "red":
+                        messagebox.showinfo("Destination reached","Hey! I am at the destination")
+                    else:
+                        messagebox.showinfo("Destination reached","Congrats! You now at the destination")
                     if path_counter == 6:
                         self.six_with_overlap = 1
                     else:
@@ -991,6 +995,8 @@ class Ludo:
                     if self.robo_prem == 1:
                         print("\nRemoving here in overlap")
                         self.robo_store.remove(take_coin_number+1)
+                        if len(self.robo_store) <= 1:
+                            self.count_robo_stage_from_start = 2
 
                     if take_coin_number == 0:
                        remade_coin = self.make_canvas.create_oval(100+40, 15+40, 100+40+40, 15+40+40, width=3, fill="red", outline="black")
@@ -1182,11 +1188,20 @@ class Ludo:
         if  destination_reached == 1:# If all coins in block reach to the destination, winner and runner check
             self.take_permission += 1
             if self.take_permission == 1:# Winner check
-                messagebox.showinfo("Winner","Congrats! You are the winner")
+                if self.robo_prem == 1 and color_coin == "red":
+                    messagebox.showinfo("Winner", "Congrats! Computer is the winner")
+                else:
+                    messagebox.showinfo("Winner","Congrats! You are the winner")
             elif self.take_permission == 2:# 1st runner check
-                messagebox.showinfo("Winner", "Wow! You are 1st runner")
+                if self.robo_prem == 1 and color_coin == "red":
+                    messagebox.showinfo("Winner", "Wow! Computer is 1st runner")
+                else:
+                    messagebox.showinfo("Winner", "Wow! You are 1st runner")
             elif self.take_permission == 3:# 2nd runner check
-                messagebox.showinfo("Winner", "Wow! You are 2nd runner")
+                if self.robo_prem == 1 and color_coin == "red":
+                    messagebox.showinfo("Winner", "Computer is 2nd runner")
+                else:
+                    messagebox.showinfo("Winner", "You are 2nd runner")
 
             self.block_value_predict[temp_delete][1]['state'] = DISABLED
             self.total_people_play.remove(temp_delete)
@@ -1225,14 +1240,14 @@ class Ludo:
                 
                 if len(self.robo_store) == 1:
                     if self.move_red_counter<6:
-                        if (self.count_robo_stage_from_start>3) and (temp[self.robo_store[0]-1] >=27 and temp[self.robo_store[0]-1]<=38):
-                            self.count_robo_stage_from_start = 0
+                        if (self.count_robo_stage_from_start>3) and (temp[self.robo_store[0]-1] >=33 and temp[self.robo_store[0]-1]<=38):
+                            self.count_robo_stage_from_start = 2
                         self.main_controller("red", self.robo_store[0]) 
                     else:
                         forward_perm = 0
                         for coin in take_ref:
                             if coin>-1 and coin<101:
-                                if coin-temp[self.robo_store[0]-1] >= 6 and coin-temp[self.robo_store[0]-1] <= 12:
+                                if (coin != 40 or coin != 35 or coin != 27 or coin != 22 or coin != 14 or coin != 9 or coin !=1 or coin !=48) and coin-temp[self.robo_store[0]-1] >= 6 and coin-temp[self.robo_store[0]-1] <= 12:
                                     forward_perm = 1
                                     break
                                 else:
@@ -1311,7 +1326,7 @@ class Ludo:
                                 for robo in temp_robo_store:#  robo is coin number
                                     for coin_other in take_ref:# coin_other is sky_blue coin location
                                         if coin_other>-1 and coin_other<100:
-                                            if take_len>1 and (temp[robo-1]>38 and coin_other<=38) or ((temp[robo-1] == 9 or temp[robo-1] == 14 or temp[robo-1] == 27 or temp[robo-1] == 35 or temp[robo-1] == 40 or temp[robo-1] == 48 or temp[robo-1] == 22) and coin_other<=temp[robo-1]):  # avoid case to store
+                                            if take_len>1 and (temp[robo-1]>38 and coin_other<=38) or ((temp[robo-1] == 9 or temp[robo-1] == 14 or temp[robo-1] == 27 or temp[robo-1] == 35 or temp[robo-1] == 40 or temp[robo-1] == 48 or temp[robo-1] == 22) and (coin_other<=temp[robo-1] or (coin_other>temp[robo-1] and coin_other<=temp[robo-1]+3))):  # avoid case to store
                                                 take_len-=1
                                             else:
                                                 store[temp[robo-1]-coin_other] = (robo, take_ref.index(coin_other)+1)# Store coin number
