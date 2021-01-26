@@ -1225,7 +1225,9 @@ class Ludo:
                 
                 if len(self.robo_store) == 1:
                     if self.move_red_counter<6:
-                        self.main_controller("red", self.robo_store[0])
+                        if (self.count_robo_stage_from_start>3) and (temp[self.robo_store[0]-1] >=27 and temp[self.robo_store[0]-1]<=38):
+                            self.count_robo_stage_from_start = 0
+                        self.main_controller("red", self.robo_store[0]) 
                     else:
                         forward_perm = 0
                         for coin in take_ref:
@@ -1302,14 +1304,15 @@ class Ludo:
                         if process_forward:
                             print("\nPresent 2 now")
                             print("Proceed as location not satisfied")
+                            take_len = len(temp_robo_store)
                             store = {}
                             if take_ref:
                                 print("\nPresent 3 now")
                                 for robo in temp_robo_store:#  robo is coin number
                                     for coin_other in take_ref:# coin_other is sky_blue coin location
                                         if coin_other>-1 and coin_other<100:
-                                            if temp[robo-1]>38 and coin_other<=38:# avoid case to store
-                                                pass
+                                            if take_len>1 and (temp[robo-1]>38 and coin_other<=38) or ((temp[robo-1] == 9 or temp[robo-1] == 14 or temp[robo-1] == 27 or temp[robo-1] == 35 or temp[robo-1] == 40 or temp[robo-1] == 48 or temp[robo-1] == 22) and coin_other<=temp[robo-1]):  # avoid case to store
+                                                take_len-=1
                                             else:
                                                 store[temp[robo-1]-coin_other] = (robo, take_ref.index(coin_other)+1)# Store coin number
                             # positive_dis = robo front          negative_dis = robo_behind
@@ -1377,7 +1380,7 @@ class Ludo:
                                     print("\nProblem here 1")
                                 if not work_comp_in_neg and not work_comp_in_pos:
                                     print("\nProblem here 2")
-                                    print("positive and negative doed not working....so here")
+                                    print("positive and negative does not working....so here")
                                     close_to_dest = temp_robo_store[0]
                                     print("\nProblem here 3")
                                     for coin_index in range(1,len(temp_robo_store)):
