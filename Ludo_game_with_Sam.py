@@ -995,7 +995,7 @@ class Ludo:
                     if self.robo_prem == 1:
                         print("\nRemoving here in overlap")
                         self.robo_store.remove(take_coin_number+1)
-                        if len(self.robo_store) <= 1:
+                        if self.red_coin_position.count(-1)>=1:
                             self.count_robo_stage_from_start = 2
 
                     if take_coin_number == 0:
