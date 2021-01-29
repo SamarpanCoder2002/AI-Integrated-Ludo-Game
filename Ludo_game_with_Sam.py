@@ -736,7 +736,6 @@ class Ludo:
 
             else:
                 messagebox.showerror("Wrong choice","Sorry, Your coin in not permitted to travel")
-                self.block_value_predict[0][3]['state'] = NORMAL
                 self.num_btns_state_controller(self.block_value_predict[0][2])
 
                 if self.robo_prem == 1:
@@ -782,7 +781,6 @@ class Ludo:
 
             else:
                 messagebox.showerror("Wrong choice", "Sorry, Your coin in not permitted to travel")
-                self.block_value_predict[3][3]['state'] = NORMAL
                 self.num_btns_state_controller(self.block_value_predict[3][2])
                 return
 
@@ -823,7 +821,6 @@ class Ludo:
 
             else:
                 messagebox.showerror("Wrong choice", "Sorry, Your coin in not permitted to travel")
-                self.block_value_predict[2][3]['state'] = NORMAL
                 self.num_btns_state_controller(self.block_value_predict[2][2])
                 return
 
@@ -864,7 +861,6 @@ class Ludo:
 
             else:
                 messagebox.showerror("Wrong choice", "Sorry, Your coin in not permitted to travel")
-                self.block_value_predict[1][3]['state'] = NORMAL
                 self.num_btns_state_controller(self.block_value_predict[1][2])
                 return
 
