@@ -9,7 +9,7 @@ class Ludo:
     def __init__(self, root,six_side_block,five_side_block,four_side_block,three_side_block,two_side_block,one_side_block):
         self.window = root
         # Make canvas
-        self.make_canvas = Canvas(self.window, bg="#4d4dff", width=800, height=630)
+        self.make_canvas = Canvas(self.window, bg="#141414", width=800, height=630)
         self.make_canvas.pack(fill=BOTH,expand=1)
 
         # Make some containers to store data
@@ -361,8 +361,14 @@ class Ludo:
         take_entry.focus()
 
         def filtering():# Total player input value filtering
-            response_take = self.input_filtering(take_entry.get())
-            if response_take is True and int(take_entry.get())>1:
+            def input_filtering(coin_number):# Input value Filtering
+                try:
+                    return True if (4>=int(coin_number)>=2) or type(coin_number) == int else False
+                except:
+                    return False
+
+            response_take = input_filtering(take_entry.get())
+            if response_take:
                 for player_index in range(int(take_entry.get())):
                     self.total_people_play.append(player_index)
                 print(self.total_people_play)
@@ -370,6 +376,8 @@ class Ludo:
                 top.destroy()
             else:
                 messagebox.showerror("Input Error", "Please input number of players between 2 and 4")
+                top.destroy()
+                self.take_initial_control()
 
         submit_btn = Button(top,text="Submit",bg="#262626",fg="#00FF00",font=("Arial",13,"bold"),relief=RAISED,bd=3,command=filtering,state=DISABLED)
         submit_btn.place(x=350,y=87)
@@ -505,7 +513,8 @@ class Ludo:
             if permission == 0:
                 self.make_command(None)
             else:
-                block_value_predict[3]['state'] = NORMAL# Give btn activation
+                self.num_btns_state_controller(block_value_predict[2])
+
                 if self.robo_prem == 1 and block_value_predict == self.block_value_predict[0]:
                     robo_operator = "give"
                 block_value_predict[1]['state'] = DISABLED# Predict btn deactivation
@@ -517,7 +526,7 @@ class Ludo:
                 self.six_with_overlap = 0
             self.make_command()
 
-        if  permanent_block_number == 6 and self.six_counter<3 and block_value_predict[3]['state'] == NORMAL:
+        if  permanent_block_number == 6 and self.six_counter<3 and block_value_predict[2][0]['state'] == NORMAL:
             self.time_for-=1
         else:
             self.six_counter=0
@@ -545,59 +554,81 @@ class Ludo:
 
     def instruction_btn_red(self):
         block_predict_red = Label(self.make_canvas,image=self.block_number_side[0])
-        block_predict_red.place(x=45,y=15)
+        block_predict_red.place(x=34,y=15)
         predict_red = Button(self.make_canvas, bg="black", fg="#00FF00", relief=RAISED, bd=5, text="Predict", font=("Arial", 8, "bold"), command=lambda: self.make_prediction("red"))
-        predict_red.place(x=37, y=15 + 40)
-        entry_take_red = Entry(self.make_canvas,bg="white",fg="blue",font=("Arial",25,"bold","italic"),width=2,relief=SUNKEN,bd=5)
-        entry_take_red.place(x=40,y=15+80)
-        final_move = Button(self.make_canvas,bg="black",fg="#00FF00",relief=RAISED,bd=5,text="Give",font=("Arial",8,"bold"),command=lambda: self.main_controller("red",entry_take_red.get()),state=DISABLED)
-        final_move.place(x=42,y=15+140)
-        Label(self.make_canvas,text="Player 1",bg="#4d4dff",fg="gold",font=("Arial",15,"bold")).place(x=15,y=15+140+40)
-        self.store_instructional_btn(block_predict_red,predict_red,entry_take_red,final_move)
+        predict_red.place(x=25, y=15 + 50)
+        
+        btn_1 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="1",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("red",'1'), state=DISABLED, disabledforeground="red")
+        btn_1.place(x=20,y=15+100)
+        btn_2 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="2",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("red",'2'), state=DISABLED, disabledforeground="red")
+        btn_2.place(x=60,y=15+100)
+        btn_3 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="3",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("red",'3'), state=DISABLED, disabledforeground="red")
+        btn_3.place(x=20,y=15+100+40)
+        btn_4 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="4",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("red",'4'), state=DISABLED, disabledforeground="red")
+        btn_4.place(x=60,y=15+100+40)
+
+        Label(self.make_canvas,text="Player 1",bg="#141414",fg="gold",font=("Arial",15,"bold")).place(x=15,y=15+140+50)
+        self.store_instructional_btn(block_predict_red,predict_red,[btn_1,btn_2,btn_3,btn_4])
 
     def instruction_btn_sky_blue(self):
         block_predict_sky_blue = Label(self.make_canvas, image=self.block_number_side[0])
-        block_predict_sky_blue.place(x=45, y=15+(40*6+40*3)+10)
+        block_predict_sky_blue.place(x=34, y=15+(40*6+40*3)+10)
         predict_sky_blue = Button(self.make_canvas, bg="black", fg="#00FF00", relief=RAISED, bd=5, text="Predict",font=("Arial", 8, "bold"), command=lambda: self.make_prediction("sky_blue"))
-        predict_sky_blue.place(x=37, y=15+(40*6+40*3)+40 + 10)
-        entry_take_sky_blue = Entry(self.make_canvas, bg="white", fg="blue", font=("Arial", 25, "bold", "italic"), width=2,relief=SUNKEN, bd=5)
-        entry_take_sky_blue.place(x=40, y=15+(40*6+40*3)+40 + 50)
-        final_move = Button(self.make_canvas, bg="black", fg="#00FF00", relief=RAISED, bd=5, text="Give", font=("Arial", 8, "bold"),command=lambda: self.main_controller("sky_blue",entry_take_sky_blue.get()),state=DISABLED)
-        final_move.place(x=42, y=15+(40*6+40*3)+40 + 110)
-        Label(self.make_canvas, text="Player 2", bg="#4d4dff", fg="gold", font=("Arial", 15, "bold")).place(x=15,y=15+(40*6+40*3)+40 + 110+ 40)
-        self.store_instructional_btn(block_predict_sky_blue, predict_sky_blue, entry_take_sky_blue, final_move)
+        predict_sky_blue.place(x=25, y=15+(40*6+40*3)+40 + 20)
+
+        btn_1 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="1",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("sky_blue",'1'), state=DISABLED, disabledforeground="red")
+        btn_1.place(x=20,y=15+(40*6+40*3)+40 + 70)
+        btn_2 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="2",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("sky_blue",'2'), state=DISABLED, disabledforeground="red")
+        btn_2.place(x=60,y=15+(40*6+40*3)+40 + 70)
+        btn_3 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="3",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("sky_blue",'3'), state=DISABLED, disabledforeground="red")
+        btn_3.place(x=20,y=15+(40*6+40*3)+40 + 70+ 40)
+        btn_4 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="4",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("sky_blue",'4'), state=DISABLED, disabledforeground="red")
+        btn_4.place(x=60,y=15+(40*6+40*3)+40 + 70+ 40)
+
+        Label(self.make_canvas, text="Player 2", bg="#141414", fg="gold", font=("Arial", 15, "bold")).place(x=12,y=15+(40*6+40*3)+40 + 110+50)
+        self.store_instructional_btn(block_predict_sky_blue, predict_sky_blue, [btn_1,btn_2,btn_3,btn_4])
 
     def instruction_btn_yellow(self):
         block_predict_yellow = Label(self.make_canvas, image=self.block_number_side[0])
-        block_predict_yellow.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 10)+10, y=15 + (40 * 6 + 40 * 3) + 10)
+        block_predict_yellow.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 10)+20, y=15 + (40 * 6 + 40 * 3) + 10)
         predict_yellow = Button(self.make_canvas, bg="black", fg="#00FF00", relief=RAISED, bd=5, text="Predict",font=("Arial", 8, "bold"), command=lambda: self.make_prediction("yellow"))
-        predict_yellow.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+10, y=15 + (40 * 6 + 40 * 3) + 40 + 10)
-        entry_take_yellow = Entry(self.make_canvas, bg="white", fg="blue", font=("Arial", 25, "bold", "italic"),width=2, relief=SUNKEN, bd=5)
-        entry_take_yellow.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+13, y=15 + (40 * 6 + 40 * 3) + 40 + 50)
-        final_move = Button(self.make_canvas, bg="black", fg="#00FF00", relief=RAISED, bd=5, text="Give",font=("Arial", 8, "bold"),command=lambda: self.main_controller("yellow",entry_take_yellow.get()),state=DISABLED)
-        final_move.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+17, y=15 + (40 * 6 + 40 * 3) + 40 + 110)
-        Label(self.make_canvas, text="Player 3", bg="#4d4dff", fg="gold", font=("Arial", 15, "bold")).place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 3),y=15 + (40 * 6 + 40 * 3) + 40 + 110 + 40)
-        self.store_instructional_btn(block_predict_yellow, predict_yellow, entry_take_yellow, final_move)
+        predict_yellow.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+20, y=15 + (40 * 6 + 40 * 3) + 40 + 20)
+        
+        btn_1 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="1",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("yellow",'1'), state=DISABLED, disabledforeground="red")
+        btn_1.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+15, y=15 + (40 * 6 + 40 * 3) + 40 + 70)
+        btn_2 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="2",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("yellow",'2'), state=DISABLED, disabledforeground="red")
+        btn_2.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+15 + 40, y=15 + (40 * 6 + 40 * 3) + 40 + 70)
+        btn_3 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="3",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("yellow",'3'), state=DISABLED, disabledforeground="red")
+        btn_3.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+15, y=15 + (40 * 6 + 40 * 3) + 40 + 70+ 40)
+        btn_4 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="4",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("yellow",'4'), state=DISABLED, disabledforeground="red")
+        btn_4.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+15 + 40, y=15 + (40 * 6 + 40 * 3) + 40 + 70+ 40)
+        
+        Label(self.make_canvas, text="Player 3", bg="#141414", fg="gold", font=("Arial", 15, "bold")).place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 +7),y=15+(40*6+40*3)+40 + 110+50)
+        self.store_instructional_btn(block_predict_yellow, predict_yellow, [btn_1,btn_2,btn_3,btn_4])
 
     def instruction_btn_green(self):
         block_predict_green = Label(self.make_canvas, image=self.block_number_side[0])
-        block_predict_green.place(x=100+(40*6+40*3+40*6+10)+10, y=15)
+        block_predict_green.place(x=100+(40*6+40*3+40*6+10)+20, y=15)
         predict_green = Button(self.make_canvas, bg="black", fg="#00FF00", relief=RAISED, bd=5, text="Predict", font=("Arial", 8, "bold"), command=lambda: self.make_prediction("green"))
-        predict_green.place(x=100+(40*6+40*3+40*6+2)+10, y=15 + 40)
-        entry_take_green = Entry(self.make_canvas, bg="white", fg="blue", font=("Arial", 25, "bold", "italic"), width=2, relief=SUNKEN, bd=5)
-        entry_take_green.place(x=100+(40*6+40*3+40*6+2)+13, y=15 + 80)
-        final_move = Button(self.make_canvas, bg="black", fg="#00FF00", relief=RAISED, bd=5, text="Give",font=("Arial", 8, "bold"),command=lambda: self.main_controller("green",entry_take_green.get()),state=DISABLED)
-        final_move.place(x=100+(40*6+40*3+40*6+2)+17, y=15 + 140)
-        Label(self.make_canvas, text="Player 4", bg="#4d4dff", fg="gold", font=("Arial", 15, "bold")).place(x=100+(40*6+40*3+40*6+3), y=15 + 140+40)
-        self.store_instructional_btn(block_predict_green, predict_green, entry_take_green, final_move)
+        predict_green.place(x=100+(40*6+40*3+40*6+2)+20, y=15 + 50)
+        
+        btn_1 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="1",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("green",'1'), state=DISABLED, disabledforeground="red")
+        btn_1.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+15,y=15+100)
+        btn_2 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="2",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("green",'2'), state=DISABLED, disabledforeground="red")
+        btn_2.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+15 + 40,y=15+100)
+        btn_3 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="3",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("green",'3'), state=DISABLED, disabledforeground="red")
+        btn_3.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+15,y=15+100+40)
+        btn_4 = Button(self.make_canvas,bg="#262626",fg="#00eb00",text="4",font=("Arial",13,"bold","italic"),relief=RAISED,bd=3,command=lambda: self.main_controller("green",'4'), state=DISABLED, disabledforeground="red")
+        btn_4.place(x=100 + (40 * 6 + 40 * 3 + 40 * 6 + 2)+15 + 40,y=15+100+40)
+        
+        Label(self.make_canvas, text="Player 4", bg="#141414", fg="gold", font=("Arial", 15, "bold")).place(x=100+(40*6+40*3+40*6+7), y=15+140+50)
+        self.store_instructional_btn(block_predict_green, predict_green, [btn_1,btn_2,btn_3,btn_4])
 
-
-    def store_instructional_btn(self, block_indicator, predictor, entry_controller, give_finally):
+    def store_instructional_btn(self, block_indicator, predictor, entry_controller):
         temp = []
         temp.append(block_indicator)
         temp.append(predictor)
         temp.append(entry_controller)
-        temp.append(give_finally)
         self.block_value_predict.append(temp)
 
     def red_circle_start_position(self, coin_number):
@@ -613,7 +644,6 @@ class Ludo:
         self.window.update()
         time.sleep(0.2)
 
-
     def green_circle_start_position(self,coin_number):
         self.make_canvas.delete(self.made_green_coin[int(coin_number)-1])
         self.made_green_coin[int(coin_number)-1] = self.make_canvas.create_oval(100 + (40*8), 15 + 40, 100 +(40*9), 15 + 40+ 40, fill="#00FF00", width=3)
@@ -626,7 +656,6 @@ class Ludo:
         self.green_coin_position[int(coin_number)-1] = 14
         self.window.update()
         time.sleep(0.2)
-
 
     def yellow_circle_start_position(self,coin_number):
         self.make_canvas.delete(self.made_yellow_coin[int(coin_number)-1])
@@ -641,7 +670,6 @@ class Ludo:
         self.window.update()
         time.sleep(0.2)
 
-
     def sky_blue_circle_start_position(self,coin_number):
         self.make_canvas.delete(self.made_sky_blue_coin[int(coin_number)-1])
         self.made_sky_blue_coin[int(coin_number)-1] = self.make_canvas.create_oval(100+240,340+(40*5)-5,100+240+40,340+(40*6)-5,fill="#04d9ff",width=3)
@@ -655,18 +683,19 @@ class Ludo:
         self.window.update()
         time.sleep(0.2)
 
+    def num_btns_state_controller(self, take_nums_btns_list, state_control = 1):
+        if state_control:
+            for num_btn in take_nums_btns_list:
+                num_btn['state'] = NORMAL
+        else:
+            for num_btn in take_nums_btns_list:
+                num_btn['state'] = DISABLED
 
     def main_controller(self, color_coin, coin_number):
         robo_operator = None
-        processing_result = self.input_filtering(coin_number)# Value filtering
-        if processing_result is True:
-            pass
-        else:
-            messagebox.showerror("Wrong input number","Please input the coin number between 1 to 4")
-            return
 
         if  color_coin == "red":
-            self.block_value_predict[0][3]['state'] = DISABLED
+            self.num_btns_state_controller(self.block_value_predict[0][2], 0)
 
             if self.move_red_counter == 106:
                 messagebox.showwarning("Destination reached","Reached at the destination")
@@ -690,7 +719,8 @@ class Ludo:
                 else:
                     if not self.robo_prem: 
                             messagebox.showerror("Not possible","Sorry, not permitted")
-                    self.block_value_predict[0][3]['state'] = NORMAL
+                    self.num_btns_state_controller(self.block_value_predict[0][2])
+
                     if self.robo_prem:
                         robo_operator = "give"
                         self.robo_judge(robo_operator)
@@ -707,6 +737,8 @@ class Ludo:
             else:
                 messagebox.showerror("Wrong choice","Sorry, Your coin in not permitted to travel")
                 self.block_value_predict[0][3]['state'] = NORMAL
+                self.num_btns_state_controller(self.block_value_predict[0][2])
+
                 if self.robo_prem == 1:
                     robo_operator = "give"
                     self.robo_judge(robo_operator)
@@ -716,7 +748,7 @@ class Ludo:
 
 
         elif color_coin == "green":
-            self.block_value_predict[3][3]['state'] = DISABLED
+            self.num_btns_state_controller(self.block_value_predict[3][2], 0)
 
             if self.move_green_counter == 106:
                 messagebox.showwarning("Destination reached","Reached at the destination")
@@ -736,7 +768,7 @@ class Ludo:
                     self.green_coin_position[int(coin_number) - 1] = self.motion_of_coin(self.green_coin_position[int(coin_number) - 1], self.made_green_coin[int(coin_number) - 1], self.green_number_label[int(coin_number) - 1], green_start_label_x, green_start_label_y, "green", self.move_green_counter)
                 else:
                    messagebox.showerror("Not possible","No path available")
-                   self.block_value_predict[3][3]['state'] = NORMAL
+                   self.num_btns_state_controller(self.block_value_predict[3][2])
                    return
 
 
@@ -751,12 +783,14 @@ class Ludo:
             else:
                 messagebox.showerror("Wrong choice", "Sorry, Your coin in not permitted to travel")
                 self.block_value_predict[3][3]['state'] = NORMAL
+                self.num_btns_state_controller(self.block_value_predict[3][2])
                 return
 
             self.block_value_predict[3][1]['state'] = NORMAL
 
         elif color_coin == "yellow":
-            self.block_value_predict[2][3]['state'] = DISABLED
+            
+            self.num_btns_state_controller(self.block_value_predict[2][2], 0)
 
             if self.move_yellow_counter == 106:
                 messagebox.showwarning("Destination reached","Reached at the destination")
@@ -775,7 +809,8 @@ class Ludo:
                     self.yellow_coin_position[int(coin_number) - 1] = self.motion_of_coin(self.yellow_coin_position[int(coin_number) - 1], self.made_yellow_coin[int(coin_number) - 1], self.yellow_number_label[int(coin_number) - 1], yellow_start_label_x, yellow_start_label_y, "yellow", self.move_yellow_counter)
                 else:
                    messagebox.showerror("Not possible","No path available")
-                   self.block_value_predict[2][3]['state'] = NORMAL
+                   
+                   self.num_btns_state_controller(self.block_value_predict[2][2])
                    return
 
                 if  self.yellow_coin_position[int(coin_number)-1]==22 or self.yellow_coin_position[int(coin_number)-1]==9 or self.yellow_coin_position[int(coin_number)-1]==48 or self.yellow_coin_position[int(coin_number)-1]==35 or self.yellow_coin_position[int(coin_number)-1]==1 or self.yellow_coin_position[int(coin_number)-1]==14 or self.yellow_coin_position[int(coin_number)-1]==40 or self.yellow_coin_position[int(coin_number)-1]==27:
@@ -789,13 +824,15 @@ class Ludo:
             else:
                 messagebox.showerror("Wrong choice", "Sorry, Your coin in not permitted to travel")
                 self.block_value_predict[2][3]['state'] = NORMAL
+                self.num_btns_state_controller(self.block_value_predict[2][2])
                 return
 
             self.block_value_predict[2][1]['state'] = NORMAL
 
  
         elif color_coin == "sky_blue":
-            self.block_value_predict[1][3]['state'] = DISABLED
+            self.num_btns_state_controller(self.block_value_predict[1][2], 0)   
+
             if self.move_red_counter == 106:
                 messagebox.showwarning("Destination reached","Reached at the destination")
 
@@ -813,7 +850,8 @@ class Ludo:
                     self.sky_blue_coin_position[int(coin_number) - 1] = self.motion_of_coin(self.sky_blue_coin_position[int(coin_number) - 1], self.made_sky_blue_coin[int(coin_number) - 1], self.sky_blue_number_label[int(coin_number) - 1], sky_blue_start_label_x, sky_blue_start_label_y, "sky_blue", self.move_sky_blue_counter)
                 else:
                    messagebox.showerror("Not possible","No path available")
-                   self.block_value_predict[1][3]['state'] = NORMAL
+                   
+                   self.num_btns_state_controller(self.block_value_predict[1][2])
                    return
 
                 if  self.sky_blue_coin_position[int(coin_number)-1]==22 or self.sky_blue_coin_position[int(coin_number)-1]==9 or self.sky_blue_coin_position[int(coin_number)-1]==48 or self.sky_blue_coin_position[int(coin_number)-1]==35 or self.sky_blue_coin_position[int(coin_number)-1]==1 or self.sky_blue_coin_position[int(coin_number)-1]==14 or self.sky_blue_coin_position[int(coin_number)-1]==27 or self.sky_blue_coin_position[int(coin_number)-1]==40:
@@ -827,6 +865,7 @@ class Ludo:
             else:
                 messagebox.showerror("Wrong choice", "Sorry, Your coin in not permitted to travel")
                 self.block_value_predict[1][3]['state'] = NORMAL
+                self.num_btns_state_controller(self.block_value_predict[1][2])
                 return
 
             self.block_value_predict[1][1]['state'] = NORMAL
@@ -1380,16 +1419,6 @@ class Ludo:
                             self.main_controller("red", coin_proceed)
         else:
             self.make_prediction("red")# Prediction Function Call
-
-    # Input value Filtering
-    def input_filtering(self,coin_number):
-        try:
-            if (4>=int(coin_number)>=1) or type(coin_number) == int:
-                return True
-            else:
-                return False
-        except:
-            return False
 
 
 if __name__ == '__main__':
