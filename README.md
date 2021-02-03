@@ -37,6 +37,15 @@
 
 <h3 align="center"><b>Show 💘 by Starring this Repo</b></h3>
 
+***
+### ⚒️ ***_Requirements of this game:-_***
+<h4>1. Python(version >3.3)</h4>
+<h4>2. Pillow</h4>
+<h3>🚧 To Install Pillow, Open Your Terminal or cmd and Write:-</h3>
+
+```bash
+pip install pillow
+```
 
 ***
 <h2 align="center"><b>💡 Some Important Links 💡</b></h2>
