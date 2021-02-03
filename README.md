@@ -29,11 +29,11 @@
 
 <h3 align="center"> 💻 <b><i>This is a Desktop App</i></b> 💻</h3></br>
 <h3 align="center">💘 For <b><i>Play With Computer </i>🧐</b></h3>
-<h3 align="center"><b>Computer Will Deal With ❤️ Red ❤️ and You Will Deal With 💙 Sky-Blue 💙</b></h3></br>
+<h3 align="center"><b>🎯 Computer Will Deal With ❤️ Red ❤️ and You Will Deal With 💙 Sky-Blue 💙</b></h3></br>
 
 <h3 align="center">💘 For <b><i>Play With Friends </i>🧐</b></h3>
-<h3 align="center"><b> Minimum Players to participate: 2 Players</b></h3>
-<h3 align="center"><b> Maximum Players to participate: 4 Players</b></h3>
+<h3 align="center"><b> 🎯 Minimum Players to participate: 2 Players</b></h3>
+<h3 align="center"><b> 🎯 Maximum Players to participate: 4 Players</b></h3>
 
 
 ---
