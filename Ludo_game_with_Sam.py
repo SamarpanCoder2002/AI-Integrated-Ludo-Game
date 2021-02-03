@@ -1,4 +1,4 @@
-                                      # Ludo game with Sam #
+                                                        # Ludo game Integrated With AI #
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image,ImageTk
@@ -348,9 +348,9 @@ class Ludo:
 
         # Make other window to control take
         top = Toplevel()
-        top.geometry("530x230")
-        top.maxsize(530,230)
-        top.minsize(530,230)
+        top.geometry("530x300")
+        top.maxsize(530,300)
+        top.minsize(530,300)
         top.config(bg="#141414")
         top.iconbitmap("Images/ludo_icon.ico")
 
@@ -384,27 +384,56 @@ class Ludo:
 
         def operate(ind):
             if ind:
-                top.destroy()
                 self.robo_prem = 1
                 for player_index in range(2):
                     self.total_people_play.append(player_index)
                 print(self.total_people_play)
-                self.make_command("predict")
+                def delay_with_instrctions(time_is):
+                    if place_ins['text'] != "":
+                        place_ins.place_forget()
+                    if command_play['text'] != "":
+                        command_play.place_forget()
                 
+                    place_ins['text'] = f"  Your game will start within {time_is} sec"
+                    place_ins.place(x=20, y=220)
+
+                    if time_is > 5:
+                        command_play['text'] = f"             Machine Play With Red and You Play With Sky Blue"
+                    elif time_is>= 2 and time_is<5:
+                        command_play['text'] = f"                       You Will Get the First Chance to play"
+                    else: 
+                        command_play['text'] = f"                                        Enjoy this Game"
+                    command_play.place(x=10, y=260)
+
+                time_is = 10
+                place_ins = Label(top, text="", font=("Arial", 20, "bold"), fg="#FF0000", bg="#141414")
+                command_play = Label(top, text="", font=("Arial", 12, "bold"), fg="#af7439", bg="#141414")
+
+                try:
+                    while time_is:
+                        delay_with_instrctions(time_is)
+                        time_is-=1
+                        self.window.update()
+                        time.sleep(1)
+                    top.destroy()
+                except:
+                    print("Force Stop Error in Operate")
+                self.block_value_predict[1][1]['state'] = NORMAL
             else:
                 submit_btn['state'] = NORMAL
                 take_entry['state'] = NORMAL
         
-        mvc_btn = Button(top,text="Play With Computer",bg="#262626",fg="#00FF00",font=("Arial",15,"bold"),relief=RAISED,bd=3,command=lambda: operate(1))
+        mvc_btn = Button(top,text="Play With Computer",bg="#262626",fg="#00FF00",font=("Arial",15,"bold"),relief=RAISED,bd=3,command=lambda: operate(1), activebackground="#262626")
         mvc_btn.place(x=30,y=160)
 
-        mvh_btn = Button(top,text="Play With Friends",bg="#262626",fg="#00FF00",font=("Arial",15,"bold"),relief=RAISED,bd=3,command=lambda: operate(0))
+        mvh_btn = Button(top,text="Play With Friends",bg="#262626",fg="#00FF00",font=("Arial",15,"bold"),relief=RAISED,bd=3,command=lambda: operate(0), activebackground="#262626")
         mvh_btn.place(x=260,y=160)
 
         top.mainloop()
 
     # Get block value after prediction based on probability
     def make_prediction(self,color_indicator):
+        try:
             if color_indicator == "red":
                 block_value_predict = self.block_value_predict[0]
                 if self.robo_prem and self.count_robo_stage_from_start < 3:
@@ -447,7 +476,12 @@ class Ludo:
 
             # Permanent predicted value containing image set
             block_value_predict[0]['image'] = self.block_number_side[permanent_block_number-1]
+            if self.robo_prem == 1 and color_indicator == "red":
+                self.window.update()
+                time.sleep(0.4)
             self.instructional_btn_customization_based_on_current_situation(color_indicator,permanent_block_number,block_value_predict)
+        except:
+            print("Force Stop Error in Prediction")
         
     def instructional_btn_customization_based_on_current_situation(self,color_indicator,permanent_block_number,block_value_predict):
         robo_operator = None
@@ -889,98 +923,101 @@ class Ludo:
             self.make_command(robo_operator)
 
     def motion_of_coin(self,counter_coin,specific_coin,number_label,number_label_x ,number_label_y,color_coin,path_counter):
-        number_label.place(x=number_label_x,y=number_label_y)
-        while True:
-            if path_counter == 0:
-                break
-            elif (counter_coin == 51 and color_coin == "red") or (counter_coin==12 and color_coin == "green") or (counter_coin == 25 and color_coin == "yellow") or (counter_coin == 38 and color_coin == "sky_blue") or counter_coin>=100:
-                if counter_coin<100:
-                    counter_coin=100
+        try:
+            number_label.place(x=number_label_x,y=number_label_y)
+            while True:
+                if path_counter == 0:
+                    break
+                elif (counter_coin == 51 and color_coin == "red") or (counter_coin==12 and color_coin == "green") or (counter_coin == 25 and color_coin == "yellow") or (counter_coin == 38 and color_coin == "sky_blue") or counter_coin>=100:
+                    if counter_coin<100:
+                        counter_coin=100
 
-                counter_coin = self.under_room_traversal_control(specific_coin, number_label, number_label_x, number_label_y, path_counter, counter_coin, color_coin)
+                    counter_coin = self.under_room_traversal_control(specific_coin, number_label, number_label_x, number_label_y, path_counter, counter_coin, color_coin)
 
-                if  counter_coin == 106:
-                    
-                    if self.robo_prem == 1 and color_coin == "red":
-                        messagebox.showinfo("Destination reached","Hey! I am at the destination")
-                    else:
-                        messagebox.showinfo("Destination reached","Congrats! You now at the destination")
-                    if path_counter == 6:
-                        self.six_with_overlap = 1
-                    else:
-                        self.time_for -= 1
-                break
+                    if  counter_coin == 106:
+                        
+                        if self.robo_prem == 1 and color_coin == "red":
+                            messagebox.showinfo("Destination reached","Hey! I am at the destination")
+                        else:
+                            messagebox.showinfo("Destination reached","Congrats! You now at the destination")
+                        if path_counter == 6:
+                            self.six_with_overlap = 1
+                        else:
+                            self.time_for -= 1
+                    break
 
-            counter_coin += 1
-            path_counter -=1
-            number_label.place_forget()
+                counter_coin += 1
+                path_counter -=1
+                number_label.place_forget()
 
-            print(counter_coin)
+                print(counter_coin)
 
-            if counter_coin<=5:
-                self.make_canvas.move(specific_coin, 40, 0)
-                number_label_x+=40
-            elif counter_coin == 6:
-                self.make_canvas.move(specific_coin, 40, -40)
-                number_label_x += 40
-                number_label_y-=40
-            elif 6< counter_coin <=11:
-                self.make_canvas.move(specific_coin, 0, -40)
-                number_label_y -= 40
-            elif counter_coin <=13:
-                self.make_canvas.move(specific_coin, 40, 0)
-                number_label_x += 40
-            elif counter_coin <=18:
-                self.make_canvas.move(specific_coin, 0, 40)
-                number_label_y += 40
-            elif counter_coin == 19:
-                self.make_canvas.move(specific_coin, 40, 40)
-                number_label_x += 40
-                number_label_y += 40
-            elif counter_coin <=24:
-                self.make_canvas.move(specific_coin, 40, 0)
-                number_label_x += 40
-            elif counter_coin <=26:
-                self.make_canvas.move(specific_coin, 0, 40)
-                number_label_y += 40
-            elif counter_coin <=31:
-                self.make_canvas.move(specific_coin, -40, 0)
-                number_label_x -= 40
-            elif counter_coin == 32:
-                self.make_canvas.move(specific_coin, -40, 40)
-                number_label_x -= 40
-                number_label_y += 40
-            elif counter_coin <= 37:
-                self.make_canvas.move(specific_coin, 0, 40)
-                number_label_y += 40
-            elif counter_coin <= 39:
-                self.make_canvas.move(specific_coin, -40, 0)
-                number_label_x -= 40
-            elif counter_coin <= 44:
-                self.make_canvas.move(specific_coin, 0, -40)
-                number_label_y -= 40
-            elif counter_coin == 45:
-                self.make_canvas.move(specific_coin, -40, -40)
-                number_label_x -= 40
-                number_label_y -= 40
-            elif counter_coin <= 50:
-                self.make_canvas.move(specific_coin, -40, 0)
-                number_label_x -= 40
-            elif 50< counter_coin <=52:
-                self.make_canvas.move(specific_coin, 0, -40)
-                number_label_y -= 40
-            elif counter_coin == 53:
-                self.make_canvas.move(specific_coin, 40, 0)
-                number_label_x += 40
-                counter_coin = 1
+                if counter_coin<=5:
+                    self.make_canvas.move(specific_coin, 40, 0)
+                    number_label_x+=40
+                elif counter_coin == 6:
+                    self.make_canvas.move(specific_coin, 40, -40)
+                    number_label_x += 40
+                    number_label_y-=40
+                elif 6< counter_coin <=11:
+                    self.make_canvas.move(specific_coin, 0, -40)
+                    number_label_y -= 40
+                elif counter_coin <=13:
+                    self.make_canvas.move(specific_coin, 40, 0)
+                    number_label_x += 40
+                elif counter_coin <=18:
+                    self.make_canvas.move(specific_coin, 0, 40)
+                    number_label_y += 40
+                elif counter_coin == 19:
+                    self.make_canvas.move(specific_coin, 40, 40)
+                    number_label_x += 40
+                    number_label_y += 40
+                elif counter_coin <=24:
+                    self.make_canvas.move(specific_coin, 40, 0)
+                    number_label_x += 40
+                elif counter_coin <=26:
+                    self.make_canvas.move(specific_coin, 0, 40)
+                    number_label_y += 40
+                elif counter_coin <=31:
+                    self.make_canvas.move(specific_coin, -40, 0)
+                    number_label_x -= 40
+                elif counter_coin == 32:
+                    self.make_canvas.move(specific_coin, -40, 40)
+                    number_label_x -= 40
+                    number_label_y += 40
+                elif counter_coin <= 37:
+                    self.make_canvas.move(specific_coin, 0, 40)
+                    number_label_y += 40
+                elif counter_coin <= 39:
+                    self.make_canvas.move(specific_coin, -40, 0)
+                    number_label_x -= 40
+                elif counter_coin <= 44:
+                    self.make_canvas.move(specific_coin, 0, -40)
+                    number_label_y -= 40
+                elif counter_coin == 45:
+                    self.make_canvas.move(specific_coin, -40, -40)
+                    number_label_x -= 40
+                    number_label_y -= 40
+                elif counter_coin <= 50:
+                    self.make_canvas.move(specific_coin, -40, 0)
+                    number_label_x -= 40
+                elif 50< counter_coin <=52:
+                    self.make_canvas.move(specific_coin, 0, -40)
+                    number_label_y -= 40
+                elif counter_coin == 53:
+                    self.make_canvas.move(specific_coin, 40, 0)
+                    number_label_x += 40
+                    counter_coin = 1
 
-            number_label.place_forget()
-            number_label.place(x=number_label_x, y=number_label_y)
+                number_label.place_forget()
+                number_label.place(x=number_label_x, y=number_label_y)
 
-            self.window.update()
-            time.sleep(0.2)
+                self.window.update()
+                time.sleep(0.2)
 
-        return counter_coin
+            return counter_coin
+        except:
+            print("Force Stop Error Came in motion of coin")
 
     # For same position, previous coin deleted and set to the room
     def coord_overlap(self, counter_coin, color_coin, path_to_traverse_before_overlap):
@@ -1222,7 +1259,6 @@ class Ludo:
 
     def robo_judge(self, ind="give"):
         if ind == "give":# For give the value
-
             all_in = 1# Denoting all the coins are present in the room
             for i in range(4):
                 if self.red_coin_position[i] == -1:
@@ -1423,7 +1459,7 @@ if __name__ == '__main__':
     window.geometry("800x630")
     window.maxsize(800,630)
     window.minsize(800,630)
-    window.title("Play Ludo with Sam")
+    window.title("AI Integration With Ludo")
     window.iconbitmap("Images/ludo_icon.ico")
     block_six_side = ImageTk.PhotoImage(Image.open("Images/6_block.png").resize((33, 33), Image.ANTIALIAS))
     block_five_side = ImageTk.PhotoImage(Image.open("Images/5_block.png").resize((33, 33), Image.ANTIALIAS))
