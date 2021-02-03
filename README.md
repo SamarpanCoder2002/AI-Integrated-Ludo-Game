@@ -41,7 +41,7 @@
 ***
 <h2 align="center"><b>💡 Some Important Links 💡</b></h2>
 
-- [<h3>Click Here to See the Project Video</h3>](https://youtu.be/K6LHcfr1HMQ "LCO")
+- [<h3>Click Here to See the Project Video</h3>](https://youtu.be/5NScX6qgd3Y)
 
 - [<h3>Follow Me on LinkedIn to Get Regular Project Updates</h3>](https://www.linkedin.com/in/samarpan-dasgupta-4aa1061b0/ "LCO")
 
