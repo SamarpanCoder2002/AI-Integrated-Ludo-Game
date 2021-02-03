@@ -348,16 +348,16 @@ class Ludo:
 
         # Make other window to control take
         top = Toplevel()
-        top.geometry("600x230")
-        top.maxsize(600,230)
-        top.minsize(600,230)
+        top.geometry("530x230")
+        top.maxsize(530,230)
+        top.minsize(530,230)
         top.config(bg="#141414")
         top.iconbitmap("Images/ludo_icon.ico")
 
         head = Label(top,text="-:Total number of players:- ",font=("Arial",25,"bold","italic"),bg="#141414",fg="chocolate")
-        head.place(x=70,y=30)
+        head.place(x=50,y=30)
         take_entry = Entry(top,font=("Arial",18,"bold","italic"),relief=SUNKEN,bd=5,width=12, state=DISABLED)
-        take_entry.place(x=150,y=85)
+        take_entry.place(x=130,y=85)
         take_entry.focus()
 
         def filtering():# Total player input value filtering
@@ -380,7 +380,7 @@ class Ludo:
                 self.take_initial_control()
 
         submit_btn = Button(top,text="Submit",bg="#262626",fg="#00FF00",font=("Arial",13,"bold"),relief=RAISED,bd=3,command=filtering,state=DISABLED)
-        submit_btn.place(x=350,y=87)
+        submit_btn.place(x=330,y=87)
 
         def operate(ind):
             if ind:
@@ -399,7 +399,7 @@ class Ludo:
         mvc_btn.place(x=30,y=160)
 
         mvh_btn = Button(top,text="Play With Friends",bg="#262626",fg="#00FF00",font=("Arial",15,"bold"),relief=RAISED,bd=3,command=lambda: operate(0))
-        mvh_btn.place(x=300,y=160)
+        mvh_btn.place(x=260,y=160)
 
         top.mainloop()
 
