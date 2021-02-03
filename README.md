@@ -24,13 +24,16 @@
 
 <p align="center"><img src="Documents\entry.png" width=500px height=250px></p>
 <h3 align="center"><b>🙋 You Can Select Your Favourable Game Mode From Here 🙋</b></h3>
-<h3 align="center"> 💻 <b><i>This is a Desktop App</i></b> 💻</h3>
+
+***
+
+<h3 align="center"> 💻 <b><i>This is a Desktop App</i></b> 💻</h3></br>
 <h3 align="center">💘 For <b><i>Play With Computer </i>🧐</b></h3>
-<h3 align="center"><b>Computer Will Deal With ❤️ Red ❤️ and You Will Deal With 💙 Sky-Blue 💙</b></h3>
+<h3 align="center"><b>Computer Will Deal With ❤️ Red ❤️ and You Will Deal With 💙 Sky-Blue 💙</b></h3></br>
 
-
-### <p align="center"> Minimum Players to participate: 2 Players</p>
-### <p align="center"> Maximum Players to participate: 4 Players</p>
+<h3 align="center">💘 For <b><i>Play With Friends </i>🧐</b></h3>
+<h3 align="center"><b> Minimum Players to participate: 2 Players</b></h3>
+<h3 align="center"><b> Maximum Players to participate: 4 Players</b></h3>
 
 
 ---
