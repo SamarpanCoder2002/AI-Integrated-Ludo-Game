@@ -356,8 +356,8 @@ class Ludo:
 
         head = Label(top,text="-:Total number of players:- ",font=("Arial",25,"bold","italic"),bg="#141414",fg="chocolate")
         head.place(x=70,y=30)
-        take_entry = Entry(top,font=("Arial",18,"bold","italic"),relief=SUNKEN,bd=7,width=12)
-        take_entry.place(x=150,y=80)
+        take_entry = Entry(top,font=("Arial",18,"bold","italic"),relief=SUNKEN,bd=5,width=12, state=DISABLED)
+        take_entry.place(x=150,y=85)
         take_entry.focus()
 
         def filtering():# Total player input value filtering
@@ -393,6 +393,7 @@ class Ludo:
                 
             else:
                 submit_btn['state'] = NORMAL
+                take_entry['state'] = NORMAL
         
         mvc_btn = Button(top,text="Play With Computer",bg="#262626",fg="#00FF00",font=("Arial",15,"bold"),relief=RAISED,bd=3,command=lambda: operate(1))
         mvc_btn.place(x=30,y=160)
