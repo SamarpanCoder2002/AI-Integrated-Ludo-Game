@@ -54,7 +54,7 @@ pip install pillow
 
 - [<h3>Follow Me on LinkedIn to Get Regular Project Updates</h3>](https://www.linkedin.com/in/samarpan-dasgupta-4aa1061b0/ "LCO")
 
-<h2 align="center"><b>🧡 Thank You For Visiting 🙏, Have a Nice Day 🧡</b></h2>
+<h2 align="center"><b>🧡 Thank You For Visiting 🙏, Have a Nice Day 🧡 </b></h2>
 
 
 
