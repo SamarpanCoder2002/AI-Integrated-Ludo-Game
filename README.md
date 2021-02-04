@@ -10,7 +10,7 @@
 
 <h3 align="center"><b>  ⌛ Now I am Presenting You my New Game ⌛ </b></h3>
 
-<p align="center"><img src="Documents/ludo_gif.gif"></p>
+<p align="center"><img src="Documents/ludo_ai_gif.gif"></p>
 
 ### <p align="center"><b>💖 Yes, This is Ludo Game made by Python(Version 3) Tkinter 💖</b></p>
 
