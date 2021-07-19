@@ -8,7 +8,7 @@
 
 <h1 align="center"> 👋 Welcome Developers 👋  </h1>
 
-<h3 align="center"><b>  ⌛ Here's my New Game ⌛ </b></h3>
+<h3 align="center"><b>  ⌛ That's my New Game ⌛ </b></h3>
 
 <p align="center"><img src="Documents/ludo_ai_gif.gif"></p>
 
