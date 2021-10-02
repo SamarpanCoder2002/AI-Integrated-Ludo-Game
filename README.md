@@ -35,7 +35,7 @@
 <h3 align="center"><b> 🎯 Minimum Players to participate: 2 Players</b></h3>
 <h3 align="center"><b> 🎯 Maximum Players to participate: 4 Players</b></h3></br>
 
-### <p align="center">🧐 Before Contributing, Recommended to Check [CONTRIBUTING.md]() file</p>
+### <p align="center">🧐 Before Contributing, Recommended to Check [CONTRIBUTING.md](https://github.com/SamarpanCoder2002/AI-Integrated-Ludo-Game/blob/main/CONTRIBUTING.md) file</p>
 
 <h3 align="center"><b>Show 💘 by Starring this Repo</b></h3>
 
