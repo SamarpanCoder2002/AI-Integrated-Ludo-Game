@@ -4,7 +4,7 @@
 ![](https://img.shields.io/badge/Game-Ludo-yellow.svg)
 ![](https://img.shields.io/badge/Mode-AI-orange.svg)
 ![](https://img.shields.io/badge/Python_Version-3.9-brown.svg)
-![](https://img.shields.io/badge/Status-Complete-green.svg)
+![](https://img.shields.io/badge/Status-Stable-green.svg)
 
 <h1 align="center"> 👋 Welcome Developers 👋  </h1>
 
@@ -12,7 +12,7 @@
 
 <p align="center"><img src="Documents/ludo_ai_gif.gif"></p>
 
-### <p align="center"><b>💖 Yes, This is Ludo Game made by Python(Version 3) Tkinter 💖</b></p>
+### <p align="center"><b>💖 Yes, This is Ludo Game made by Python Tkinter 💖</b></p>
 
 ***
 
@@ -34,6 +34,8 @@
 <h3 align="center">💘 For <b><i>Play With Friends </i>🧐</b></h3>
 <h3 align="center"><b> 🎯 Minimum Players to participate: 2 Players</b></h3>
 <h3 align="center"><b> 🎯 Maximum Players to participate: 4 Players</b></h3></br>
+
+### <p align="center">🧐 Before Contributing, Recommended to Check [CONTRIBUTING.md]() file</p>
 
 <h3 align="center"><b>Show 💘 by Starring this Repo</b></h3>
 
